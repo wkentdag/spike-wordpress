@@ -19,12 +19,12 @@ test('errors without a "name"', (t) => {
 
 test('errors without "addDataTo"', (t) => {
   t.throws(
-    () => { new Wordpress({ name: process.env.NAME}) }, // eslint-disable-line
+    () => { new Wordpress({ name: '138.68.60.148'}) }, // eslint-disable-line
     'ValidationError: [spike-wordpress constructor] option "addDataTo" is required'
   )
 })
 
 test('initializes with a name and addDataTo', (t) => {
-  const wp = new Wordpress({ name: process.env.NAME, addDataTo: {} })
+  const wp = new Wordpress({ name: '138.68.60.148', addDataTo: {} })
   t.truthy(wp)
 })
