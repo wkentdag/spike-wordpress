@@ -9,7 +9,6 @@ const rimraf = require('rimraf')
 const htmlStandards = require('spike-html-standards')
 
 const compilerMock = { options: { spike: { locals: {} } } }
-const NAME = process.env.NAME
 
 test('errors without a "name"', (t) => {
   t.throws(
@@ -20,12 +19,12 @@ test('errors without a "name"', (t) => {
 
 test('errors without "addDataTo"', (t) => {
   t.throws(
-    () => { new Wordpress({ name: NAME}) }, // eslint-disable-line
+    () => { new Wordpress({ name: process.env.NAME}) }, // eslint-disable-line
     'ValidationError: [spike-wordpress constructor] option "addDataTo" is required'
   )
 })
 
 test('initializes with a name and addDataTo', (t) => {
-  const wp = new Wordpress({ name: NAME, addDataTo: {} })
+  const wp = new Wordpress({ name: process.env.NAME, addDataTo: {} })
   t.truthy(wp)
 })
