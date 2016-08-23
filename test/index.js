@@ -2,13 +2,6 @@ require('dotenv').config({ silent: true })
 
 const test = require('ava')
 const Wordpress = require('..')
-const Spike = require('spike-core')
-const path = require('path')
-const fs = require('fs')
-const rimraf = require('rimraf')
-const htmlStandards = require('spike-html-standards')
-
-const compilerMock = { options: { spike: { locals: {} } } }
 
 test('errors without a "name"', (t) => {
   t.throws(
