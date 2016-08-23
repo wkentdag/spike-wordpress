@@ -1,0 +1,38 @@
+{
+  "name": "spike-wordpress",
+  "version": "0.0.0",
+  "description": "wordpress plugin for spike",
+  "main": "lib",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wkentdag/spike-wordpress.git"
+  },
+  "keywords": [
+    "spike",
+    "wordpress",
+    "spikeplugin"
+  ],
+  "author": "will kent-daggett",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wkentdag/spike-wordpress/issues"
+  },
+  "homepage": "https://github.com/wkentdag/spike-wordpress#readme",
+  "dependencies": {
+    "joi": "^9.0.4",
+    "reshape": "^0.3.2",
+    "reshape-loader": "^0.2.3",
+    "when": "^3.7.7"
+  },
+  "devDependencies": {
+    "ava": "^0.16.0",
+    "dotenv": "^2.0.0",
+    "path": "^0.12.7",
+    "rimraf": "^2.5.4",
+    "spike-core": "^0.11.2",
+    "spike-html-standards": "^0.2.1"
+  }
+}
