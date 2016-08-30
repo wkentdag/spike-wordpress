@@ -40,3 +40,16 @@ module.exports = {
 }
 
 ```
+
+### testing
+
+```shell
+# install module dependencies
+npm i
+
+# create a config file from the boilerplate (overwrite with your site info)
+mv .env.sample .env
+
+# run the tests
+npm test
+```

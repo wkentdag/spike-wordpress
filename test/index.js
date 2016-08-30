@@ -3,6 +3,8 @@ require('dotenv').config({ silent: true })
 const test = require('ava')
 const Wordpress = require('..')
 
+const compilerMock = { options: { spike: { locals: {} } } }
+
 test('errors without a "name"', (t) => {
   t.throws(
     () => { new Wordpress() }, // eslint-disable-line
@@ -12,12 +14,25 @@ test('errors without a "name"', (t) => {
 
 test('errors without "addDataTo"', (t) => {
   t.throws(
-    () => { new Wordpress({ name: '138.68.60.148'}) }, // eslint-disable-line
+    () => { new Wordpress({ name: process.env.NAME}) }, // eslint-disable-line
     'ValidationError: [spike-wordpress constructor] option "addDataTo" is required'
   )
 })
 
 test('initializes with a name and addDataTo', (t) => {
-  const wp = new Wordpress({ name: '138.68.60.148', addDataTo: {} })
+  const wp = new Wordpress({ name: process.env.NAME, addDataTo: {} })
   t.truthy(wp)
+})
+
+test.cb('returns valid content', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.wordpress.posts.length, 2)
+    t.end()
+  })
 })
