@@ -32,7 +32,7 @@ test.cb('returns valid content', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.posts.length, 2)
+    t.is(locals.wordpress.posts.length, 3)
     t.end()
   })
 })
