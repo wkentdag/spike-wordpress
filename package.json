@@ -1,41 +1,46 @@
 {
   "name": "spike-wordpress",
-  "version": "0.0.0",
   "description": "wordpress plugin for spike",
-  "main": "lib",
-  "scripts": {
-    "test": "standard --verbose | snazzy && ava"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wkentdag/spike-wordpress.git"
-  },
-  "keywords": [
-    "spike",
-    "wordpress",
-    "spikeplugin"
-  ],
+  "version": "0.0.0",
   "author": "will kent-daggett",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wkentdag/spike-wordpress/issues"
+  "ava": {
+    "verbose": "true",
+    "serial": "true"
   },
-  "homepage": "https://github.com/wkentdag/spike-wordpress#readme",
+  "bugs": "https://github.com/wkentdag/spike-wordpress/issues",
   "dependencies": {
     "joi": "^9.0.4",
-    "reshape": "^0.3.2",
-    "reshape-loader": "^0.2.3",
     "rest": "^2.0.0",
     "when": "^3.7.7"
   },
   "devDependencies": {
     "ava": "^0.16.0",
+    "coveralls": "^2.11.12",
     "dotenv": "^2.0.0",
+    "nyc": "^8.1.0",
     "path": "^0.12.7",
     "rimraf": "^2.5.4",
     "snazzy": "^4.0.1",
-    "spike-core": "^0.11.2",
-    "spike-html-standards": "^0.3.0",
     "standard": "^8.0.0-beta.5"
+  },
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "homepage": "https://github.com/wkentdag/spike-wordpress",
+  "keywords": [
+    "spike",
+    "wordpress",
+    "spikeplugin"
+  ],
+  "license": "MIT",
+  "main": "lib",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wkentdag/spike-wordpress.git"
+  },
+  "scripts": {
+    "test": "standard --verbose | snazzy && ava",
+    "coverage": "nyc ava",
+    "coveralls": "nyc --reporter=lcov ava && cat ./coverage/lcov.info | coveralls"
   }
 }

@@ -2,3 +2,5 @@
 test
 .editorconfig
 .travis.yml
+.nyc_output
+coverage

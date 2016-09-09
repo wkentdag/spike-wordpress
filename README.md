@@ -3,10 +3,12 @@ spike wordpress
 
 [![npm](https://img.shields.io/npm/v/spike-wordpress.svg?style=flat)](http://badge.fury.io/js/spike-wordpress) [![tests](https://img.shields.io/travis/wkentdag/spike-wordpress/master.svg?style=flat)](https://travis-ci.org/wkentdag/spike-wordpress) [![dependencies](https://david-dm.org/wkentdag/pow.svg)](https://david-dm.org/wkentdag/pow) [![Coverage Status](https://img.shields.io/coveralls/wkentdag/spike-wordpress.svg?style=flat)](https://coveralls.io/r/wkentdag/spike-wordpress?branch=master)
 
-pull wordpress posts into your [spike](https://github.com/static-dev/spike) static project
+pull wordpress posts into your [spike](https://www.spike.cf/) static project
+
+> ported from [`static-dev/spike-rooftop`](https://github.com/static-dev/spike-rooftop) - check that out if you're using rooftop CMS
 
 ### installation
-```
+```sh
 npm i -S spike-wordpress
 ```
 
@@ -19,31 +21,70 @@ npm i -S spike-wordpress
 - :beers:
 
 ### usage
+add the plugin to your `app.js` file:
 
 ```js
 //  app.js
+
 const wordpress = require('spike-wordpress')
-const htmlStandards = require('spike-html-standards')
+const standard = require('reshape-standard')
 const locals = {}
 
 module.exports = {
   plugins: [
     new Wordpress({
-      addDataTo: locals, name: 'my_wordpress_site'
+      name: 'my_wordpress_site',
+      addDataTo: locals,
     })
   ],
   reshape: (ctx) => {
-    return htmlStandards({
+    return standard({
+      webpack: ctx,
       locals: { locals }
     })
   }
+  // ...other config...
 }
-
 ```
+
+access your posts as local variables in your view files:
+
+```jade
+//  some_template.sgr
+
+extends(src='layout.sgr')
+  block(name='content')
+    h1 My awesome static blog
+
+    h2 Recent posts
+    .recent
+      each(loop='post, i in wordpress.posts')
+        if(condition='i < 10')
+          h1 {{ post.title }}
+          h2 {{ post.excerpt }}
+          h3 by {{ post.author }} on {{ post.date }}
+```
+
+### features
+
+more of a roadmap at the moment...
+
+- [x] pass posts to locals
+- [ ] fetch and sort multiple `contentTypes` [in progress]
+- [ ] write to view template
+  - [ ] basic
+  - [ ] customize slug
+- [ ] query each `contentType`
+  - [ ] order
+  - [ ] search
+  - [ ] limit
+  - [ ] transform
+- [ ] hooks
+  - [ ] post transform
 
 ### testing
 
-```shell
+```sh
 # install module dependencies
 npm i
 
