@@ -81,6 +81,7 @@ more of a roadmap at the moment...
   - [ ] transform
 - [ ] hooks
   - [ ] post transform
+- [ ] cache `wordpress` locals object as json
 
 ### testing
 

@@ -10,6 +10,8 @@
   "bugs": "https://github.com/wkentdag/spike-wordpress/issues",
   "dependencies": {
     "joi": "^9.0.4",
+    "reshape": "^0.3.2",
+    "reshape-loader": "^0.2.3",
     "rest": "^2.0.0",
     "when": "^3.7.7"
   },
@@ -19,8 +21,10 @@
     "dotenv": "^2.0.0",
     "nyc": "^8.1.0",
     "path": "^0.12.7",
+    "reshape-standard": "^0.2.0",
     "rimraf": "^2.5.4",
     "snazzy": "^4.0.1",
+    "spike-core": "^0.12.1",
     "standard": "^8.0.0-beta.5"
   },
   "engines": {
