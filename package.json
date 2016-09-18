@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "ava": "^0.16.0",
-    "coveralls": "^2.11.12",
+    "coveralls": "^2.11.13",
     "dotenv": "^2.0.0",
     "nyc": "^8.3.0",
     "path": "^0.12.7",
