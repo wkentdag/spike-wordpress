@@ -70,7 +70,7 @@ extends(src='layout.sgr')
 more of a roadmap at the moment...
 
 - [x] pass posts to locals
-- [ ] fetch and sort multiple `contentTypes` [in progress]
+- [x] [fetch and sort multiple post categories](#select-posts-by-category)
 - [ ] write to view template
   - [ ] basic
   - [ ] customize slug
@@ -82,6 +82,22 @@ more of a roadmap at the moment...
 - [ ] hooks
   - [ ] post transform
 - [ ] cache `wordpress` locals object as json
+
+#### select posts by category
+
+by default the plugin returns all posts into the local variable `wordpress.posts`,
+but you can also select multiple types of posts according to their `category` on wordpress.
+simply pass an array of categories when you initialize the plugin, and then
+access them in your views with `wordpress[category]`:
+
+```js
+new Wordpress({
+  name: 'my_wordpress_site',
+  addDataTo: locals,
+  postTypes: ['interview', 'review']
+})
+
+```
 
 ### testing
 

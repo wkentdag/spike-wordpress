@@ -36,7 +36,7 @@ test.cb('returns valid content', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.posts.length, 3)
+    t.is(locals.wordpress.posts.length, 4)
     t.end()
   })
 })
@@ -52,10 +52,25 @@ test.cb('works as a plugin to spike', (t) => {
   project.on('warning', t.end)
   project.on('compile', () => {
     const src = fs.readFileSync(path.join(projectPath, 'public/index.html'), 'utf8')
-    t.truthy(src === '<p>[object Object]</p><p>[object Object]</p><p>[object Object]</p>')  //  FIXME
+    t.truthy(src === '<p>[object Object]</p><p>[object Object]</p><p>[object Object]</p><p>[object Object]</p>')  //  FIXME
     rimraf.sync(path.join(projectPath, 'public'))
     t.end()
   })
 
   project.compile()
+})
+
+test.cb('fetches multiple postTypes', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: ['interview', 'review']
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.wordpress.interview.length, 1)
+    t.is(locals.wordpress.review.length, 2)
+    t.end()
+  })
 })
