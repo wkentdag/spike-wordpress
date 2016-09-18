@@ -62,7 +62,7 @@ extends(src='layout.sgr')
         if(condition='i < 10')
           h1 {{ post.title }}
           h2 {{ post.excerpt }}
-          h3 by {{ post.author }} on {{ post.date }}
+          h3 by {{ post.author.name }} on {{ post.date }}
 ```
 
 ### features
@@ -70,20 +70,20 @@ extends(src='layout.sgr')
 more of a roadmap at the moment...
 
 - [x] pass posts to locals
-- [x] [fetch and sort multiple post categories](#select-posts-by-category)
+- [x] [fetch and sort multiple `postTypes`](#select-posts-by-type)
+- [ ] [apply query params per `postType`](#apply-query-params-per-postType)
+  - [x] order
+  - [x] search
+  - [x] limit
+  - [x] transform
 - [ ] write to view template
   - [ ] basic
   - [ ] customize slug
-- [ ] query each `contentType`
-  - [ ] order
-  - [ ] search
-  - [ ] limit
-  - [ ] transform
 - [ ] hooks
   - [ ] post transform
 - [ ] cache `wordpress` locals object as json
 
-#### select posts by category
+#### select posts by type
 
 by default the plugin returns all posts into the local variable `wordpress.posts`,
 but you can also select multiple types of posts according to their `category` on wordpress.
@@ -95,6 +95,28 @@ new Wordpress({
   name: 'my_wordpress_site',
   addDataTo: locals,
   postTypes: ['interview', 'review']
+})
+
+```
+
+#### apply query params per type
+
+to apply a set of query parameters to an array of `postTypes`, pass in a config object instead of a string:
+
+```js
+new Wordpress({
+  name: 'my_wordpress_site',
+  addDataTo: locals,
+  postTypes: [{
+    category: 'funtimes',
+    search: 'text',
+    order: 'ASC',
+    number: '10'  //  default limit is 20, max is 100
+    transform: (post) => {  // uses a generic transform function by default. also pass `false` to get the raw result
+      post.foo = 'bar'
+      return post
+    }
+  }]
 })
 
 ```

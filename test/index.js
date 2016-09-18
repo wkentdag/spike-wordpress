@@ -74,3 +74,96 @@ test.cb('fetches multiple postTypes', (t) => {
     t.end()
   })
 })
+
+test.cb('implements query search', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: [{
+      category: 'review',
+      search: 'wow'
+    }]
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.wordpress.review.length, 1)
+    t.is(locals.wordpress.review[0].slug, 'my-nice-review')
+    t.end()
+  })
+})
+
+test.cb('implements query order', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: [{
+      category: 'review',
+      order: 'ASC'
+    }]
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.wordpress.review.length, 2)
+    t.is(locals.wordpress.review[1].slug, 'my-second-review')
+    t.end()
+  })
+})
+
+test.cb('implements query limit', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: [{
+      category: 'review',
+      number: '1'
+    }]
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.wordpress.review.length, 1)
+    t.end()
+  })
+})
+
+test.cb('implements default transform function', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: [{
+      category: 'review',
+      search: 'wow'
+    }]
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.wordpress.review.length, 1)
+    t.is(locals.wordpress.review[0].author.name, 'wkentdag')
+    t.end()
+  })
+})
+
+test.cb('implements custom transform function', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: [{
+      category: 'review',
+      search: 'wow',
+      transform: (post) => {
+        post.foo = 'bar'
+        return post
+      }
+    }]
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.wordpress.review.length, 1)
+    t.is(locals.wordpress.review[0].foo, 'bar')
+    t.end()
+  })
+})
