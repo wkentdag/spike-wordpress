@@ -1,11 +1,12 @@
 require('dotenv').config({ silent: true })
 
 const test = require('ava')
+const Wordpress = require('..')
+const Spike = require('spike-core')
 const path = require('path')
 const fs = require('fs')
 const rimraf = require('rimraf')
-const Spike = require('spike-core')
-const Wordpress = require('..')
+const standard = require('reshape-standard')
 
 const compilerMock = { options: { spike: { locals: {} } } }
 
@@ -166,4 +167,43 @@ test.cb('implements custom transform function', (t) => {
     t.is(locals.wordpress.review[0].foo, 'bar')
     t.end()
   })
+})
+
+test.cb('accepts template object and generates html', (t) => {
+  const locals = {}
+  const wordpress = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: [{
+      category: 'review',
+      template: {
+        path: '../template/template.sgr',
+        output: (item) => `posts/${item.slug}.html`
+      }
+    }]
+  })
+
+  const projectPath = path.join(__dirname, 'fixtures/default')
+  const project = new Spike({
+    root: projectPath,
+    reshape: (ctx) => standard({ webpack: ctx, locals}),
+    entry: { main: [path.join(projectPath, 'main.js')] },
+    plugins: [wordpress]
+  })
+
+  project.on('error', (e) => {
+    console.error(e)
+    t.end
+  })
+  project.on('warning', t.end)
+  project.on('compile', () => {
+    const file1 = fs.readFileSync(path.join(projectPath, 'public/posts/my-nice-review.html'), 'utf8')
+    const file2 = fs.readFileSync(path.join(projectPath, 'public/posts/my-second-review.html'), 'utf8')
+    t.is(file1.trim(), '<p>my nice review</p>')
+    t.is(file2.trim(), '<p>my second review</p>')
+    rimraf.sync(path.join(projectPath, 'public'))
+    t.end()
+  })
+
+  project.compile()
 })
