@@ -1,7 +1,7 @@
 {
   "name": "spike-wordpress",
   "description": "wordpress plugin for spike",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "will kent-daggett",
   "ava": {
     "verbose": "true",
