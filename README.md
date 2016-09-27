@@ -67,15 +67,10 @@ extends(src='layout.sgr')
 
 ### features
 
-more of a roadmap at the moment...
 
 - [x] pass posts to locals
 - [x] [fetch and sort multiple `postTypes`](#select-posts-by-type)
-- [ ] [apply query params per `postType`](#apply-query-params-per-postType)
-  - [x] order
-  - [x] search
-  - [x] limit
-  - [x] transform
+- [x] [apply query params per `postType`](#apply-query-params-per-postType)
 - [ ] write to view template
   - [ ] basic
   - [ ] customize slug
