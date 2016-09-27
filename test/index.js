@@ -186,7 +186,7 @@ test.cb('accepts template object and generates html', (t) => {
   const projectPath = path.join(__dirname, 'fixtures/default')
   const project = new Spike({
     root: projectPath,
-    reshape: (ctx) => standard({ webpack: ctx, locals}),
+    reshape: (ctx) => standard({ webpack: ctx, locals }),
     entry: { main: [path.join(projectPath, 'main.js')] },
     plugins: [wordpress]
   })
@@ -199,8 +199,8 @@ test.cb('accepts template object and generates html', (t) => {
   project.on('compile', () => {
     const file1 = fs.readFileSync(path.join(projectPath, 'public/posts/my-nice-review.html'), 'utf8')
     const file2 = fs.readFileSync(path.join(projectPath, 'public/posts/my-second-review.html'), 'utf8')
-    t.is(file1.trim(), '<p>my nice review</p>')
-    t.is(file2.trim(), '<p>my second review</p>')
+    t.is(file1.trim(), '<p>6</p>')
+    t.is(file2.trim(), '<p>8</p>')
     rimraf.sync(path.join(projectPath, 'public'))
     t.end()
   })

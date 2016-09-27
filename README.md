@@ -1,7 +1,7 @@
 spike wordpress
 ================
 
-[![npm](https://img.shields.io/npm/v/spike-wordpress.svg?style=flat)](http://badge.fury.io/js/spike-wordpress) [![tests](https://img.shields.io/travis/wkentdag/spike-wordpress/master.svg?style=flat)](https://travis-ci.org/wkentdag/spike-wordpress) [![dependencies](https://david-dm.org/wkentdag/pow.svg)](https://david-dm.org/wkentdag/pow) [![Coverage Status](https://img.shields.io/coveralls/wkentdag/spike-wordpress.svg?style=flat)](https://coveralls.io/r/wkentdag/spike-wordpress?branch=master)
+[![npm](https://img.shields.io/npm/v/spike-wordpress.svg?style=flat)](https://www.npmjs.com/package/spike-wordpress) [![tests](https://img.shields.io/travis/wkentdag/spike-wordpress/master.svg?style=flat)](https://travis-ci.org/wkentdag/spike-wordpress) [![dependencies](https://david-dm.org/wkentdag/pow.svg)](https://david-dm.org/wkentdag/pow) [![Coverage Status](https://img.shields.io/coveralls/wkentdag/spike-wordpress.svg?style=flat)](https://coveralls.io/r/wkentdag/spike-wordpress?branch=master)
 
 pull wordpress posts into your [spike](https://www.spike.cf/) static project
 
@@ -71,9 +71,7 @@ extends(src='layout.sgr')
 - [x] pass posts to locals
 - [x] [fetch and sort multiple `postTypes`](#select-posts-by-type)
 - [x] [apply query params per `postType`](#apply-query-params-per-postType)
-- [ ] write to view template
-  - [ ] basic
-  - [ ] customize slug
+- [x] [render posts to a specific view template](#render-posts-to-a-template)
 - [ ] hooks
   - [ ] post transform
 - [ ] cache `wordpress` locals object as json
@@ -86,6 +84,7 @@ simply pass an array of categories when you initialize the plugin, and then
 access them in your views with `wordpress[category]`:
 
 ```js
+const locals = {}
 new Wordpress({
   name: 'my_wordpress_site',
   addDataTo: locals,
@@ -99,6 +98,7 @@ new Wordpress({
 to apply a set of query parameters to an array of `postTypes`, pass in a config object instead of a string:
 
 ```js
+const locals = {}
 new Wordpress({
   name: 'my_wordpress_site',
   addDataTo: locals,
@@ -114,6 +114,35 @@ new Wordpress({
   }]
 })
 
+```
+
+#### render posts to a template
+
+you can add an optional `template` param that will render each item in `postTypes[param]`
+to a specific view template with a configurable output path:
+
+```js
+const locals = {}
+new Wordpress({
+  name: 'my_wordpress_site',
+  addDataTo: locals,
+  postTypes: [{
+    category: 'portfolio',
+    template: {
+      path: 'views/portfolio-item.sgr',
+      output: (item) => `posts/${item.slug}.html`
+    }
+
+  }]
+})
+```
+
+```jade
+//  portfolio-item.sgr
+
+h1 {{ item.title }}
+img(src={{ item.featured_image }})
+p {{ item.content }}
 ```
 
 ### testing
