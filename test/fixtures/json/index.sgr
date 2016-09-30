@@ -1,0 +1,2 @@
+each(loop="post of wordpress.posts")
+  p {{ post.id }}

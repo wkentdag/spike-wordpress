@@ -73,7 +73,7 @@ extends(src='layout.sgr')
 - [x] [apply query params per `postType`](#apply-query-params-per-postType)
 - [x] [render posts to a specific view template](#render-posts-to-a-template)
 - [x] [`postTransform` hook](#posttransform-hooks)
-- [ ] cache `wordpress` locals object as json
+- [x] [save output to json](#save-output-to-json)
 
 #### select posts by type
 
@@ -171,6 +171,23 @@ new Wordpress({
     }
   }
 })
+```
+
+#### save output to json
+
+pass a file name to the `json` param to write the `locals.wordpress` output to:
+
+```js
+const locals = {}
+new Wordpress({
+  name: 'my_wordpress_site',
+  addDataTo: locals,
+  postTypes: [{
+    category: 'portfolio',
+    json: 'data.json'
+  }]
+})
+
 ```
 
 ### testing
