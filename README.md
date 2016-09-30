@@ -1,7 +1,7 @@
 spike wordpress
 ================
 
-[![npm](https://img.shields.io/npm/v/spike-wordpress.svg?style=flat)](https://www.npmjs.com/package/spike-wordpress) [![tests](https://img.shields.io/travis/wkentdag/spike-wordpress/master.svg?style=flat)](https://travis-ci.org/wkentdag/spike-wordpress) [![dependencies](https://david-dm.org/wkentdag/spike-wordpress.svg)](https://david-dm.org/wkentdag/pow) [![Coverage Status](https://img.shields.io/coveralls/wkentdag/spike-wordpress.svg?style=flat)](https://coveralls.io/r/wkentdag/spike-wordpress?branch=master)
+[![npm](https://img.shields.io/npm/v/spike-wordpress.svg?style=flat)](https://www.npmjs.com/package/spike-wordpress) [![tests](https://img.shields.io/travis/wkentdag/spike-wordpress/master.svg?style=flat)](https://travis-ci.org/wkentdag/spike-wordpress) [![dependencies](https://david-dm.org/wkentdag/spike-wordpress.svg)](https://david-dm.org/wkentdag/spike-wordpress) [![Coverage Status](https://img.shields.io/coveralls/wkentdag/spike-wordpress.svg?style=flat)](https://coveralls.io/r/wkentdag/spike-wordpress?branch=master)
 
 pull wordpress posts into your [spike](https://www.spike.cf/) static project
 
