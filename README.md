@@ -72,8 +72,7 @@ extends(src='layout.sgr')
 - [x] [fetch and sort multiple `postTypes`](#select-posts-by-type)
 - [x] [apply query params per `postType`](#apply-query-params-per-postType)
 - [x] [render posts to a specific view template](#render-posts-to-a-template)
-- [ ] hooks
-  - [ ] post transform
+- [x] [`postTransform` hook](#posttransform-hooks)
 - [ ] cache `wordpress` locals object as json
 
 #### select posts by type
@@ -143,6 +142,35 @@ new Wordpress({
 h1 {{ item.title }}
 img(src={{ item.featured_image }})
 p {{ item.content }}
+```
+
+#### postTransform hooks
+
+add a `postTransform` hook to modify posts and locals before
+your templates get compiled, but *after* each `postType`'s (optional) `transform` function runs:
+
+```js
+const fs = require('fs')
+const locals = {}
+new Wordpress({
+  name: 'my_wordpress_site',
+  addDataTo: locals,
+  postTypes: [{
+    category: 'portfolio',
+    transform: (post) => {  // this runs first...
+      return post.title
+    }
+  }],
+  hooks: {
+    postTransform: (posts, locals) => {
+      posts.map(p => p.toUpperCase())
+      //  check out `spike-records` to load in static json w/a spike-plugin
+      extraLocals = JSON.parse( fs.readFileSync('/another/remote/file.json') )
+      return [{posts, extraLocals}] //  posts = ['TITLE1', 'TITLE 2', etc]
+                                    //  locals = union of `locals` and `extraLocals`
+    }
+  }
+})
 ```
 
 ### testing
