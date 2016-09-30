@@ -207,3 +207,62 @@ test.cb('accepts template object and generates html', (t) => {
 
   project.compile()
 })
+
+test.cb('hooks :: postTransform modifies posts', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: ['review'],
+    hooks: {
+      postTransform: (posts, locals) => {
+        return [{posts: 'foo'}, {}]
+      }
+    }
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.wordpress.posts, 'foo')
+    t.end()
+  })
+})
+
+test.cb('hooks :: postTransform adds to locals', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: ['review'],
+    hooks: {
+      postTransform: (posts, locals) => {
+        return [posts, { foo: 'bar' }]
+      }
+    }
+  })
+
+  api.run(compilerMock, undefined, () => {
+    // console.log(JSON.stringify(locals,null,2))
+    t.is(locals.foo, 'bar')
+    t.is(locals.wordpress.review[0].id, 8)
+    t.end()
+  })
+})
+
+test.cb('hooks :: postTransform does not overwrite locals', (t) => {
+  const locals = { foo: 'bar' }
+  const api = new Wordpress({
+    name: process.env.NAME,
+    addDataTo: locals,
+    postTypes: ['review'],
+    hooks: {
+      postTransform: (posts, locals) => {
+        return [posts, {}]
+      }
+    }
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.foo, 'bar')
+    t.end()
+  })
+})
