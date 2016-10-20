@@ -182,10 +182,8 @@ const locals = {}
 new Wordpress({
   name: 'my_wordpress_site',
   addDataTo: locals,
-  postTypes: [{
-    category: 'portfolio',
-    json: 'data.json'
-  }]
+  json: 'data.json'
+  postTypes: ['portfolio', 'review']
 })
 
 ```
