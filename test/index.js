@@ -106,8 +106,9 @@ test.cb('implements default transform function', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.review.length, 1)
+    t.is(locals.wordpress.review[0].id, 6)
     t.is(locals.wordpress.review[0].author.name, 'wkentdag')
+    t.truthy(Object.keys(locals.wordpress.review[0].categories[0]).length === 2)
     t.end()
   })
 })
