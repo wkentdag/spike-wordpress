@@ -94,7 +94,8 @@ new Wordpress({
 
 #### apply query params per type
 
-to apply a set of query parameters to an array of `postTypes`, pass in a config object instead of a string:
+the wordpress api offers a [number](https://developer.wordpress.com/docs/api/1/get/sites/%24site/posts/) of
+optional query parameters you can use to modify your requests. to apply a set of params to a `postType`, pass in a config object instead of a string, eg:
 
 ```js
 const locals = {}
