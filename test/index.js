@@ -106,9 +106,9 @@ test.cb('implements default transform function', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.review[0].id, 6)
-    t.is(locals.wordpress.review[0].author.name, 'wkentdag')
-    t.truthy(Object.keys(locals.wordpress.review[0].categories[0]).length === 2)
+    t.is(locals.wordpress.review[0].id, 4)
+    t.is(locals.wordpress.review[0].author.name, 'wkd')
+    t.truthy(locals.wordpress.review[0].categories[0].name === 'review')
     t.end()
   })
 })
@@ -180,14 +180,14 @@ test.cb('accepts template object and generates html', (t) => {
 
   project.on('error', (e) => {
     console.error(e)
-    t.end
+    t.end()
   })
   project.on('warning', t.end)
   project.on('compile', () => {
     const file1 = fs.readFileSync(path.join(projectPath, 'public/posts/my-nice-review.html'), 'utf8')
     const file2 = fs.readFileSync(path.join(projectPath, 'public/posts/my-second-review.html'), 'utf8')
-    t.is(file1.trim(), '<p>6</p>')
-    t.is(file2.trim(), '<p>8</p>')
+    t.is(file1.trim(), '<p>4</p>')
+    t.is(file2.trim(), '<p>6</p>')
     rimraf.sync(path.join(projectPath, 'public'))
     t.end()
   })
@@ -228,9 +228,8 @@ test.cb('hooks :: postTransform adds to locals', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    // console.log(JSON.stringify(locals,null,2))
     t.is(locals.foo, 'bar')
-    t.is(locals.wordpress.review[0].id, 8)
+    t.is(locals.wordpress.review[0].id, 6)
     t.end()
   })
 })

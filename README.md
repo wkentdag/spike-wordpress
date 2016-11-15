@@ -70,10 +70,12 @@ extends(src='layout.sgr')
 
 - [x] pass posts to locals
 - [x] [fetch and sort multiple `postTypes`](#select-posts-by-type)
-- [x] [apply query params per `postType`](#apply-query-params-per-postType)
-- [x] [render posts to a specific view template](#render-posts-to-a-template)
+- [x] [filter results with query params](#filter-results-with-query-params)
+- [x] [render posts to a view template](#render-posts-to-a-template)
 - [x] [`postTransform` hook](#posttransform-hooks)
 - [x] [save output to json](#save-output-to-json)
+
+PRs welcome
 
 #### select posts by type
 
@@ -92,7 +94,7 @@ new Wordpress({
 
 ```
 
-#### apply query params per type
+#### filter results with query params
 
 the wordpress api offers a [number](https://developer.wordpress.com/docs/api/1/get/sites/%24site/posts/) of
 optional query parameters you can use to modify your requests. to apply a set of params to a `postType`, pass in a config object instead of a string, eg:
@@ -107,14 +109,28 @@ new Wordpress({
     search: 'text',
     order: 'ASC',
     number: '10'  //  default limit is 20, max is 100
-    transform: (post) => {  // uses a generic transform function by default. also pass `false` to get the raw result
+  }]
+})
+
+```
+
+you can also include a `transform` param to edit posts on the fly during the build process (see [postTransform hook](#posttransform-hooks) if you want to manipulate your locals after they've already been processed):
+
+```js
+new Wordpress({
+  name: 'my_wordpress_site',
+  addDataTo: locals,
+  postTypes: [{
+    category: 'funtimes',
+    transform: (post) => {
       post.foo = 'bar'
       return post
     }
   }]
 })
-
 ```
+
+posts are run through a generic transform function by default; you can pass `transform: false` to bypass it and return the raw result
 
 #### render posts to a template
 
@@ -191,11 +207,14 @@ new Wordpress({
 
 ### testing
 
+The tests depend on a jetpack-enabled test wordpress instance.
+If you are developing a new feature and want to run the test suite either submit a PR (they'll be auto run by travis), or file an issue and I'll get you access to the test server :)
+
 ```sh
 # install module dependencies
 npm i
 
-# create a config file from the boilerplate (overwrite with your site info)
+# create a config file from the boilerplate
 mv .env.sample .env
 
 # run the tests
