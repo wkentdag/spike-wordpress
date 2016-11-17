@@ -6,7 +6,7 @@ module.exports = {
   matchers: { html: '*(**/)*.sgr' },
   reshape: (ctx) => standard({ webpack: ctx, locals }),
   plugins: [new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals
   })]
 }

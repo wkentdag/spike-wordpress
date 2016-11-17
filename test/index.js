@@ -10,29 +10,36 @@ const standard = require('reshape-standard')
 
 const compilerMock = { options: { spike: { locals: {} } } }
 
-test('errors without a "name"', (t) => {
+test('constructor :: errors without a "site"', (t) => {
   t.throws(
     () => { new Wordpress() }, // eslint-disable-line
-    'ValidationError: [spike-wordpress constructor] option "name" is required'
+    'ValidationError: [spike-wordpress constructor] option "site" is required'
   )
 })
 
-test('errors without "addDataTo"', (t) => {
+test('constructor :: errors without "addDataTo"', (t) => {
   t.throws(
-    () => { new Wordpress({ name: process.env.NAME}) }, // eslint-disable-line
+    () => { new Wordpress({ site: process.env.SITE}) }, // eslint-disable-line
     'ValidationError: [spike-wordpress constructor] option "addDataTo" is required'
   )
 })
 
-test('initializes with a name and addDataTo', (t) => {
-  const wp = new Wordpress({ name: process.env.NAME, addDataTo: {} })
+test('constructor :: errors with a config object with no name', (t) => {
+  t.throws(
+    () => { new Wordpress({ site: process.env.SITE, addDataTo: {}, posts: [{name: 'foo', category: 'blah'}, {category: 'wow'}] }) }, //  eslint-disable-line
+    'ValidationError: [spike-wordpress constructor] option "posts" at position 1 does not match any of the allowed types'
+  )
+})
+
+test('constructor :: initializes with a site and addDataTo', (t) => {
+  const wp = new Wordpress({ site: process.env.SITE, addDataTo: {} })
   t.truthy(wp)
 })
 
 test.cb('returns valid content', (t) => {
   const locals = {}
   const api = new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals
   })
 
@@ -61,17 +68,20 @@ test.cb('works as a plugin to spike', (t) => {
   project.compile()
 })
 
-test.cb('fetches multiple postTypes', (t) => {
+test.cb('fetches multiple posts', (t) => {
   const locals = {}
   const api = new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals,
-    postTypes: ['interview', 'review']
+    posts: [
+      { name: 'interviews', category: 'interview' },
+      { name: 'reviews', category: 'review' }
+    ]
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.interview.length, 1)
-    t.is(locals.wordpress.review.length, 2)
+    t.is(locals.wordpress.interviews.length, 1)
+    t.is(locals.wordpress.reviews.length, 2)
     t.end()
   })
 })
@@ -79,9 +89,10 @@ test.cb('fetches multiple postTypes', (t) => {
 test.cb('implements query params', (t) => {
   const locals = {}
   const api = new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals,
-    postTypes: [{
+    posts: [{
+      name: 'review',
       category: 'review',
       search: 'wow'
     }]
@@ -97,9 +108,10 @@ test.cb('implements query params', (t) => {
 test.cb('implements default transform function', (t) => {
   const locals = {}
   const api = new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals,
-    postTypes: [{
+    posts: [{
+      name: 'review',
       category: 'review',
       search: 'wow'
     }]
@@ -116,9 +128,10 @@ test.cb('implements default transform function', (t) => {
 test.cb('implements custom transform function', (t) => {
   const locals = {}
   const api = new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals,
-    postTypes: [{
+    posts: [{
+      name: 'review',
       category: 'review',
       search: 'wow',
       transform: (post) => {
@@ -159,9 +172,10 @@ test.cb('writes json output', (t) => {
 test.cb('accepts template object and generates html', (t) => {
   const locals = {}
   const wordpress = new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals,
-    postTypes: [{
+    posts: [{
+      name: 'review',
       category: 'review',
       template: {
         path: '../template/template.sgr',
@@ -198,9 +212,8 @@ test.cb('accepts template object and generates html', (t) => {
 test.cb('hooks :: postTransform modifies posts', (t) => {
   const locals = {}
   const api = new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals,
-    postTypes: ['review'],
     hooks: {
       postTransform: (posts, locals) => {
         return [{posts: 'foo'}, {}]
@@ -217,9 +230,8 @@ test.cb('hooks :: postTransform modifies posts', (t) => {
 test.cb('hooks :: postTransform adds to locals', (t) => {
   const locals = {}
   const api = new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals,
-    postTypes: ['review'],
     hooks: {
       postTransform: (posts, locals) => {
         return [posts, { foo: 'bar' }]
@@ -229,7 +241,7 @@ test.cb('hooks :: postTransform adds to locals', (t) => {
 
   api.run(compilerMock, undefined, () => {
     t.is(locals.foo, 'bar')
-    t.is(locals.wordpress.review[0].id, 6)
+    t.is(locals.wordpress.posts[0].id, 8)
     t.end()
   })
 })
@@ -237,9 +249,8 @@ test.cb('hooks :: postTransform adds to locals', (t) => {
 test.cb('hooks :: postTransform does not overwrite locals', (t) => {
   const locals = { foo: 'bar' }
   const api = new Wordpress({
-    name: process.env.NAME,
+    site: process.env.SITE,
     addDataTo: locals,
-    postTypes: ['review'],
     hooks: {
       postTransform: (posts, locals) => {
         return [posts, {}]
