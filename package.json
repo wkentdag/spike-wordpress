@@ -21,7 +21,7 @@
     "dotenv": "^2.0.0",
     "nyc": "^9.0.1",
     "path": "^0.12.7",
-    "reshape-standard": "^0.4.0",
+    "reshape-standard": "^0.4.1",
     "rimraf": "^2.5.4",
     "snazzy": "^5.0.0",
     "spike-core": "^0.12.1",
