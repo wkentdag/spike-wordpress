@@ -3,9 +3,7 @@ spike wordpress
 
 [![npm](https://img.shields.io/npm/v/spike-wordpress.svg?style=flat)](https://www.npmjs.com/package/spike-wordpress) [![tests](https://img.shields.io/travis/wkentdag/spike-wordpress/master.svg?style=flat)](https://travis-ci.org/wkentdag/spike-wordpress) [![dependencies](https://david-dm.org/wkentdag/spike-wordpress.svg)](https://david-dm.org/wkentdag/spike-wordpress) [![Coverage Status](https://img.shields.io/coveralls/wkentdag/spike-wordpress.svg?style=flat)](https://coveralls.io/r/wkentdag/spike-wordpress?branch=master)
 
-pull wordpress posts into your [spike](https://www.spike.cf/) static project
-
-> ported from [`static-dev/spike-rooftop`](https://github.com/static-dev/spike-rooftop) - check that out if you're using rooftop CMS
+use wordpress as a backend for your [spike](https://www.spike.cf/) static project
 
 ### installation
 ```sh
@@ -20,8 +18,10 @@ npm i -S spike-wordpress
 - make sure the "JSON API" feature is turned on within jetpack
 - :beers:
 
+> check out [this video](https://www.youtube.com/watch?v=gdWZ0Bpvmw4) demonstrating how you can easily set up a wordpress-powered static site that recompiles whenever you publish a new post or push to github using  [roots-wordpress](https://github.com/carrot/roots-wordpress), which this project is based on :eyes:
+
 ### usage
-add the plugin to your `app.js` file:
+add the plugin to your `app.js` file...
 
 ```js
 //  app.js
@@ -33,21 +33,21 @@ const locals = {}
 module.exports = {
   plugins: [
     new Wordpress({
-      name: 'my_wordpress_site',
-      addDataTo: locals,
+      site: 'my_wordpress_site.com',
+      addDataTo: locals
     })
   ],
   reshape: (ctx) => {
     return standard({
       webpack: ctx,
-      locals: { locals }
+      locals
     })
   }
   // ...other config...
 }
 ```
 
-access your posts as local variables in your view files:
+...and then access your posts as local variables in your view files:
 
 ```jade
 //  some_template.sgr
@@ -69,59 +69,49 @@ extends(src='layout.sgr')
 
 
 - [x] pass posts to locals
-- [x] [fetch and sort multiple `postTypes`](#select-posts-by-type)
 - [x] [filter results with query params](#filter-results-with-query-params)
+- [x] [transform function](#transform-function)
 - [x] [render posts to a view template](#render-posts-to-a-template)
-- [x] [`postTransform` hook](#posttransform-hooks)
 - [x] [save output to json](#save-output-to-json)
+- [x] [`postTransform` hook](#posttransform-hook)
 
-PRs welcome
-
-#### select posts by type
-
-by default the plugin returns all posts into the local variable `wordpress.posts`,
-but you can also select multiple types of posts according to their `category` on wordpress.
-simply pass an array of categories when you initialize the plugin, and then
-access them in your views with `wordpress[category]`:
-
-```js
-const locals = {}
-new Wordpress({
-  name: 'my_wordpress_site',
-  addDataTo: locals,
-  postTypes: ['interview', 'review']
-})
-
-```
+**PRs welcome for new features!**
 
 #### filter results with query params
 
-the wordpress api offers a [number](https://developer.wordpress.com/docs/api/1/get/sites/%24site/posts/) of
-optional query parameters you can use to modify your requests. to apply a set of params to a `postType`, pass in a config object instead of a string, eg:
+by default the plugin dumps  all your posts into a single `wordpress.posts` array in the view locals, but you can use the `posts` option to make multiple queries. pass in an array of config objects with a `name` (required, so that you can access it in your locals at `wordpress[name]`) and any parameter supported by the [wordpress api](https://developer.wordpress.com/docs/api/1/get/sites/%24site/posts/):
 
 ```js
 const locals = {}
 new Wordpress({
   name: 'my_wordpress_site',
   addDataTo: locals,
-  postTypes: [{
-    category: 'funtimes',
-    search: 'text',
-    order: 'ASC',
-    number: '10'  //  default limit is 20, max is 100
-  }]
+  posts: [
+    {
+      name: 'posts'
+      number: '10'  //  default limit is 20, max is 100
+    },
+    {
+      name: 'interviews',
+      category: 'interview',
+      order: 'ASC',
+      search: 'some text'
+    }
+  ]
 })
 
 ```
 
-you can also include a `transform` param to edit posts on the fly during the build process (see [postTransform hook](#posttransform-hooks) if you want to manipulate your locals after they've already been processed):
+#### transform function
+
+you can also include an arbitrary `transform` function to apply to posts on the fly during the build process (see [postTransform hook](#posttransform-hooks) if you want to manipulate your locals after they've already been processed):
 
 ```js
 new Wordpress({
   name: 'my_wordpress_site',
   addDataTo: locals,
-  postTypes: [{
-    category: 'funtimes',
+  posts: [{
+    name: 'funtimes',
     transform: (post) => {
       post.foo = 'bar'
       return post
@@ -134,7 +124,7 @@ posts are run through a generic transform function by default; you can pass `tra
 
 #### render posts to a template
 
-you can add an optional `template` param that will render each item in `postTypes[param]`
+you can add an optional `template` param that will render each item in `posts[param]`
 to a specific view template with a configurable output path:
 
 ```js
@@ -142,13 +132,12 @@ const locals = {}
 new Wordpress({
   name: 'my_wordpress_site',
   addDataTo: locals,
-  postTypes: [{
-    category: 'portfolio',
+  posts: [{
+    name: 'portfolio',
     template: {
       path: 'views/portfolio-item.sgr',
       output: (item) => `posts/${item.slug}.html`
     }
-
   }]
 })
 ```
@@ -161,34 +150,6 @@ img(src={{ item.featured_image }})
 p {{ item.content }}
 ```
 
-#### postTransform hooks
-
-add a `postTransform` hook to modify posts and locals before
-your templates get compiled, but *after* each `postType`'s (optional) `transform` function runs:
-
-```js
-const fs = require('fs')
-const locals = {}
-new Wordpress({
-  name: 'my_wordpress_site',
-  addDataTo: locals,
-  postTypes: [{
-    category: 'portfolio',
-    transform: (post) => {  // this runs first...
-      return post.title
-    }
-  }],
-  hooks: {
-    postTransform: (posts, locals) => {
-      posts.map(p => p.toUpperCase())
-      //  check out `spike-records` to load in static json w/a spike-plugin
-      extraLocals = JSON.parse( fs.readFileSync('/another/remote/file.json') )
-      return [{posts, extraLocals}] //  posts = ['TITLE1', 'TITLE 2', etc]
-                                    //  locals = union of `locals` and `extraLocals`
-    }
-  }
-})
-```
 
 #### save output to json
 
@@ -200,9 +161,35 @@ new Wordpress({
   name: 'my_wordpress_site',
   addDataTo: locals,
   json: 'data.json'
-  postTypes: ['portfolio', 'review']
 })
 
+```
+
+
+#### postTransform hook
+
+add a `postTransform` hook to modify posts and locals before
+your templates get compiled, but *after* each `post`'s (optional) `transform` function runs:
+
+```js
+const fs = require('fs')
+const locals = {}
+new Wordpress({
+  name: 'my_wordpress_site',
+  addDataTo: locals,
+  posts: [{
+    name: 'posts',
+    transform: (post) => {  // this runs first...
+      return post.title
+    }
+  }],
+  hooks: {
+    postTransform: (posts, locals) => {
+      posts.map(p => p.toUpperCase())
+      return [{posts, locals}] //  posts = ['TITLE1', 'TITLE 2', etc]
+    }
+  }
+})
 ```
 
 ### testing
