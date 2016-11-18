@@ -1,4 +1,4 @@
-require('dotenv').config({ silent: true })
+require('dotenv').config({path: `${__dirname}/.env`})
 
 const test = require('ava')
 const Wordpress = require('..')
@@ -44,7 +44,7 @@ test.cb('returns valid content', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.posts.length, 4)
+    t.is(locals.wordpress.posts.length, 5)
     t.end()
   })
 })
@@ -60,7 +60,7 @@ test.cb('works as a plugin to spike', (t) => {
   project.on('warning', t.end)
   project.on('compile', () => {
     const src = fs.readFileSync(path.join(projectPath, 'public/index.html'), 'utf8')
-    t.truthy(src === '<p>[object Object]</p><p>[object Object]</p><p>[object Object]</p><p>[object Object]</p>')  //  FIXME
+    t.truthy(src === '<p>11</p><p>8</p><p>6</p><p>4</p><p>1</p>')
     rimraf.sync(path.join(projectPath, 'public'))
     t.end()
   })
@@ -144,6 +144,28 @@ test.cb('implements custom transform function', (t) => {
   api.run(compilerMock, undefined, () => {
     t.is(locals.wordpress.review.length, 1)
     t.is(locals.wordpress.review[0].foo, 'bar')
+    t.end()
+  })
+})
+
+test.cb('properly escapes html', (t) => {
+  const locals = {}
+  const api = new Wordpress({
+    site: process.env.SITE,
+    addDataTo: locals,
+    posts: [{
+      name: 'posts',
+      search: 'weird',
+      transform: (post) => {
+        post.foo = 'bar'
+        return post
+      }
+    }]
+  })
+
+  api.run(compilerMock, undefined, () => {
+    t.is(locals.wordpress.posts[0].title, 'a title: it’s has “weird” characters')
+    t.is(locals.wordpress.posts[0].foo, 'bar')
     t.end()
   })
 })
@@ -241,7 +263,7 @@ test.cb('hooks :: postTransform adds to locals', (t) => {
 
   api.run(compilerMock, undefined, () => {
     t.is(locals.foo, 'bar')
-    t.is(locals.wordpress.posts[0].id, 8)
+    t.is(locals.wordpress.posts[0].id, 11)
     t.end()
   })
 })
