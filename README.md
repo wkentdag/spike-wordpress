@@ -186,7 +186,7 @@ new Wordpress({
   hooks: {
     postTransform: (posts, locals) => {
       posts.map(p => p.toUpperCase())
-      return [{posts, locals}] //  posts = ['TITLE1', 'TITLE 2', etc]
+      return [posts, locals] //  posts = ['TITLE1', 'TITLE 2', etc]
     }
   }
 })
