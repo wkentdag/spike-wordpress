@@ -1,2 +1,2 @@
 each(loop="post in wordpress.posts")
-  p {{ post }}
+  p {{ post.id }}
