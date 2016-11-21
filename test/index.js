@@ -198,7 +198,6 @@ test.cb('accepts template object and generates html', (t) => {
     addDataTo: locals,
     posts: [{
       name: 'review',
-      category: 'review',
       template: {
         path: '../template/template.sgr',
         output: (item) => `posts/${item.slug}.html`
