@@ -191,7 +191,7 @@ test.cb('writes json output', (t) => {
   project.compile()
 })
 
-test.cb('accepts template object and generates html', (t) => {
+test.cb('accepts template object, generates html, and assigns _url attribute to locals', (t) => {
   const locals = {}
   const wordpress = new Wordpress({
     site: process.env.SITE,
@@ -219,6 +219,7 @@ test.cb('accepts template object and generates html', (t) => {
   })
   project.on('warning', t.end)
   project.on('compile', () => {
+    t.is(locals.wordpress.review[0]._url, '/posts/a-title-its-has-weird-characters')
     const file1 = fs.readFileSync(path.join(projectPath, 'public/posts/my-nice-review.html'), 'utf8')
     const file2 = fs.readFileSync(path.join(projectPath, 'public/posts/my-second-review.html'), 'utf8')
     t.is(file1.trim(), '<p>4</p>')
