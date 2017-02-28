@@ -27,7 +27,7 @@
     "rimraf": "^2.5.4",
     "snazzy": "^6.0.0",
     "spike-core": "^0.13.3",
-    "standard": "^8.1.0"
+    "standard": "^9.0.0"
   },
   "engines": {
     "node": ">= 6.0.0"
