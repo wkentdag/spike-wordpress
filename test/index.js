@@ -218,7 +218,10 @@ test.cb('accepts template object, generates html, and assigns _url attribute to 
     console.error(e)
     t.end()
   })
-  project.on('warning', t.end)
+  project.on('warning', (e) => {
+    console.error(e)
+    t.end()
+  })
   project.on('compile', () => {
     t.is(locals.wordpress.review[0]._url, '/posts/post-with-image')
     const file1 = fs.readFileSync(path.join(projectPath, 'public/posts/my-nice-review.html'), 'utf8')
