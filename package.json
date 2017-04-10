@@ -19,7 +19,7 @@
     "when": "^3.7.7"
   },
   "devDependencies": {
-    "ava": "0.17.0",
+    "ava": "0.18.1",
     "coveralls": "^2.11.15",
     "dotenv": "^4.0.0",
     "nyc": "^10.0.0",
@@ -28,7 +28,7 @@
     "rimraf": "^2.5.4",
     "snazzy": "^6.0.0",
     "spike-core": "^1.0.0",
-    "standard": "^8.1.0"
+    "standard": "^9.0.0"
   },
   "engines": {
     "node": ">= 6.0.0"
@@ -47,6 +47,7 @@
   },
   "scripts": {
     "test": "standard --verbose | snazzy && ava",
+		"lint:fix": "./node_modules/.bin/standard --fix",
     "coverage": "nyc ava",
     "coveralls": "nyc --reporter=lcov ava && cat ./coverage/lcov.info | coveralls"
   }
