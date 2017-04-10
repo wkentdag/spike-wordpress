@@ -44,7 +44,7 @@ test.cb('returns valid content', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.posts.length, 5)
+    t.is(locals.wordpress.posts.length, 6)
     t.end()
   })
 })
@@ -60,7 +60,7 @@ test.cb('works as a plugin to spike', (t) => {
   project.on('warning', t.end)
   project.on('compile', () => {
     const src = fs.readFileSync(path.join(projectPath, 'public/index.html'), 'utf8')
-    t.truthy(src === '<p>11</p><p>8</p><p>6</p><p>4</p><p>1</p>')
+    t.truthy(src === '<p>15</p><p>11</p><p>8</p><p>6</p><p>4</p><p>1</p>')
     rimraf.sync(path.join(projectPath, 'public'))
     t.end()
   })
@@ -219,7 +219,7 @@ test.cb('accepts template object, generates html, and assigns _url attribute to 
   })
   project.on('warning', t.end)
   project.on('compile', () => {
-    t.is(locals.wordpress.review[0]._url, '/posts/a-title-its-has-weird-characters')
+    t.is(locals.wordpress.review[0]._url, '/posts/post-with-image')
     const file1 = fs.readFileSync(path.join(projectPath, 'public/posts/my-nice-review.html'), 'utf8')
     const file2 = fs.readFileSync(path.join(projectPath, 'public/posts/my-second-review.html'), 'utf8')
     t.is(file1.trim(), '<p>4</p>')
@@ -263,7 +263,7 @@ test.cb('hooks :: postTransform adds to locals', (t) => {
 
   api.run(compilerMock, undefined, () => {
     t.is(locals.foo, 'bar')
-    t.is(locals.wordpress.posts[0].id, 11)
+    t.is(locals.wordpress.posts[0].id, 15)
     t.end()
   })
 })
