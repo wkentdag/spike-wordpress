@@ -208,7 +208,8 @@ test.cb('accepts template object, generates html, and assigns _url attribute to 
   const projectPath = path.join(__dirname, 'fixtures/default')
   const project = new Spike({
     root: projectPath,
-    reshape: (ctx) => standard({ webpack: ctx, locals }),
+    matchers: { html: '**/*.sgr' },
+    reshape: standard({ locals }),
     entry: { main: [path.join(projectPath, 'main.js')] },
     plugins: [wordpress]
   })
