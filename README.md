@@ -37,12 +37,7 @@ module.exports = {
       addDataTo: locals
     })
   ],
-  reshape: (ctx) => {
-    return standard({
-      webpack: ctx,
-      locals
-    })
-  }
+  reshape: standard({ locals }),
   // ...other config...
 }
 ```
@@ -79,7 +74,7 @@ extends(src='layout.sgr')
 
 #### filter results with query params
 
-by default the plugin dumps  all your posts into a single `wordpress.posts` array in the view locals, but you can use the `posts` option to make multiple queries. pass in an array of config objects with a `name` (required, so that you can access it in your locals at `wordpress[name]`) and any parameter supported by the [wordpress api](https://developer.wordpress.com/docs/api/1/get/sites/%24site/posts/):
+by default the plugin dumps  all your posts into a single `wordpress.posts` array in the view locals, but you can configure multiple queries in the `posts` config key. pass in an array of config objects with a `name` (required, so that you can access it in your locals at `wordpress[name]`) and any parameter supported by the [wordpress v1 api](https://developer.wordpress.com/docs/api/1/get/sites/%24site/posts/):
 
 ```js
 const locals = {}
@@ -142,12 +137,15 @@ new Wordpress({
 })
 ```
 
+Any post that gets rendered to a template gets a convenient `_url` key tacked on as well (the result of the `output` function you must pass):
+
 ```jade
 //  portfolio-item.sgr
 
-h1 {{ item.title }}
-img(src={{ item.featured_image }})
-p {{ item.content }}
+a(href={{ item._url }})
+  h1 {{ item.title }}
+  img(src={{ item.featured_image }})
+  p {{ item.content }}
 ```
 
 
