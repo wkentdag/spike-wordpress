@@ -1,7 +1,7 @@
 {
   "name": "spike-wordpress",
   "description": "wordpress plugin for spike",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "author": "will kent-daggett",
   "ava": {
     "verbose": "true",
@@ -47,7 +47,7 @@
   },
   "scripts": {
     "test": "standard --verbose | snazzy && ava",
-		"lint:fix": "./node_modules/.bin/standard --fix",
+    "lint:fix": "./node_modules/.bin/standard --fix",
     "coverage": "nyc ava",
     "coveralls": "nyc --reporter=lcov ava && cat ./coverage/lcov.info | coveralls"
   }
