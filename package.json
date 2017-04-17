@@ -13,21 +13,22 @@
     "joi": "^10.0.0",
     "lodash.pickby": "^4.6.0",
     "reshape": "^0.4.1",
-    "reshape-loader": "^0.4.2",
+    "reshape-loader": "^1.0.0",
     "rest": "^2.0.0",
+    "spike-util": "^1.0.0",
     "when": "^3.7.7"
   },
   "devDependencies": {
-    "ava": "0.17.0",
+    "ava": "0.19.1",
     "coveralls": "^2.11.15",
     "dotenv": "^4.0.0",
     "nyc": "^10.0.0",
     "path": "^0.12.7",
-    "reshape-standard": "^0.5.0",
+    "reshape-standard": "^1.1.0",
     "rimraf": "^2.5.4",
     "snazzy": "^6.0.0",
-    "spike-core": "^0.13.3",
-    "standard": "^8.1.0"
+    "spike-core": "^1.0.0",
+    "standard": "^10.0.2"
   },
   "engines": {
     "node": ">= 6.0.0"
@@ -46,6 +47,7 @@
   },
   "scripts": {
     "test": "standard --verbose | snazzy && ava",
+		"lint:fix": "./node_modules/.bin/standard --fix",
     "coverage": "nyc ava",
     "coveralls": "nyc --reporter=lcov ava && cat ./coverage/lcov.info | coveralls"
   }

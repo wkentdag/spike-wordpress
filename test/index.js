@@ -44,7 +44,7 @@ test.cb('returns valid content', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.posts.length, 5)
+    t.is(locals.wordpress.posts.length, 6)
     t.end()
   })
 })
@@ -60,7 +60,7 @@ test.cb('works as a plugin to spike', (t) => {
   project.on('warning', t.end)
   project.on('compile', () => {
     const src = fs.readFileSync(path.join(projectPath, 'public/index.html'), 'utf8')
-    t.truthy(src === '<p>11</p><p>8</p><p>6</p><p>4</p><p>1</p>')
+    t.truthy(src === '<p>15</p><p>11</p><p>8</p><p>6</p><p>4</p><p>1</p>')
     rimraf.sync(path.join(projectPath, 'public'))
     t.end()
   })
@@ -81,7 +81,7 @@ test.cb('fetches multiple posts', (t) => {
 
   api.run(compilerMock, undefined, () => {
     t.is(locals.wordpress.interviews.length, 1)
-    t.is(locals.wordpress.reviews.length, 2)
+    t.is(locals.wordpress.reviews.length, 3)
     t.end()
   })
 })
@@ -99,8 +99,8 @@ test.cb('implements query params', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.review.length, 1)
-    t.is(locals.wordpress.review[0].slug, 'my-nice-review')
+    t.is(locals.wordpress.review.length, 2)
+    t.is(locals.wordpress.review[0].slug, 'post-with-image')
     t.end()
   })
 })
@@ -118,8 +118,9 @@ test.cb('implements default transform function', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.review[0].id, 4)
+    t.is(locals.wordpress.review[0].id, 15)
     t.is(locals.wordpress.review[0].author.name, 'wkd')
+    t.is(locals.wordpress.review[0].thumbnail, 'http://138.197.198.156/wp-content/uploads/2017/02/Screen-Shot-2016-08-03-at-10.19.01-PM.png')
     t.truthy(locals.wordpress.review[0].categories[0].name === 'review')
     t.end()
   })
@@ -142,7 +143,7 @@ test.cb('implements custom transform function', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.review.length, 1)
+    t.is(locals.wordpress.review.length, 2)
     t.is(locals.wordpress.review[0].foo, 'bar')
     t.end()
   })
@@ -208,7 +209,8 @@ test.cb('accepts template object, generates html, and assigns _url attribute to 
   const projectPath = path.join(__dirname, 'fixtures/default')
   const project = new Spike({
     root: projectPath,
-    reshape: (ctx) => standard({ webpack: ctx, locals }),
+    matchers: { html: '**/*.sgr' },
+    reshape: standard({ locals }),
     entry: { main: [path.join(projectPath, 'main.js')] },
     plugins: [wordpress]
   })
@@ -217,9 +219,12 @@ test.cb('accepts template object, generates html, and assigns _url attribute to 
     console.error(e)
     t.end()
   })
-  project.on('warning', t.end)
+  project.on('warning', (e) => {
+    console.error(e)
+    t.end()
+  })
   project.on('compile', () => {
-    t.is(locals.wordpress.review[0]._url, '/posts/a-title-its-has-weird-characters')
+    t.is(locals.wordpress.review[0]._url, '/posts/post-with-image')
     const file1 = fs.readFileSync(path.join(projectPath, 'public/posts/my-nice-review.html'), 'utf8')
     const file2 = fs.readFileSync(path.join(projectPath, 'public/posts/my-second-review.html'), 'utf8')
     t.is(file1.trim(), '<p>4</p>')
@@ -263,7 +268,7 @@ test.cb('hooks :: postTransform adds to locals', (t) => {
 
   api.run(compilerMock, undefined, () => {
     t.is(locals.foo, 'bar')
-    t.is(locals.wordpress.posts[0].id, 11)
+    t.is(locals.wordpress.posts[0].id, 15)
     t.end()
   })
 })

@@ -4,7 +4,7 @@ const locals = {}
 
 module.exports = {
   matchers: { html: '*(**/)*.sgr' },
-  reshape: (ctx) => standard({ webpack: ctx, locals }),
+  reshape: standard({ locals }),
   plugins: [new Wordpress({
     site: process.env.SITE,
     addDataTo: locals,
