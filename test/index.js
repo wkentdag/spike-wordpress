@@ -81,7 +81,7 @@ test.cb('fetches multiple posts', (t) => {
 
   api.run(compilerMock, undefined, () => {
     t.is(locals.wordpress.interviews.length, 1)
-    t.is(locals.wordpress.reviews.length, 2)
+    t.is(locals.wordpress.reviews.length, 3)
     t.end()
   })
 })
@@ -99,8 +99,8 @@ test.cb('implements query params', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.review.length, 1)
-    t.is(locals.wordpress.review[0].slug, 'my-nice-review')
+    t.is(locals.wordpress.review.length, 2)
+    t.is(locals.wordpress.review[0].slug, 'post-with-image')
     t.end()
   })
 })
@@ -118,8 +118,9 @@ test.cb('implements default transform function', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.review[0].id, 4)
+    t.is(locals.wordpress.review[0].id, 15)
     t.is(locals.wordpress.review[0].author.name, 'wkd')
+    t.is(locals.wordpress.review[0].thumbnail, 'http://138.197.198.156/wp-content/uploads/2017/02/Screen-Shot-2016-08-03-at-10.19.01-PM.png')
     t.truthy(locals.wordpress.review[0].categories[0].name === 'review')
     t.end()
   })
@@ -142,7 +143,7 @@ test.cb('implements custom transform function', (t) => {
   })
 
   api.run(compilerMock, undefined, () => {
-    t.is(locals.wordpress.review.length, 1)
+    t.is(locals.wordpress.review.length, 2)
     t.is(locals.wordpress.review[0].foo, 'bar')
     t.end()
   })
