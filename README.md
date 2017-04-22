@@ -1,6 +1,8 @@
 spike wordpress
 ================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/wkentdag/spike-wordpress.svg)](https://greenkeeper.io/)
+
 [![npm](https://img.shields.io/npm/v/spike-wordpress.svg?style=flat)](https://www.npmjs.com/package/spike-wordpress) [![tests](https://img.shields.io/travis/wkentdag/spike-wordpress/master.svg?style=flat)](https://travis-ci.org/wkentdag/spike-wordpress) [![dependencies](https://david-dm.org/wkentdag/spike-wordpress.svg)](https://david-dm.org/wkentdag/spike-wordpress) [![Coverage Status](https://img.shields.io/coveralls/wkentdag/spike-wordpress.svg?style=flat)](https://coveralls.io/r/wkentdag/spike-wordpress?branch=master)
 
 use wordpress as a backend for your [spike](https://www.spike.cf/) static project
