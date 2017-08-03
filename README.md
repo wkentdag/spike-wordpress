@@ -26,7 +26,7 @@ add the plugin to your `app.js` file...
 ```js
 //  app.js
 
-const wordpress = require('spike-wordpress')
+const Wordpress = require('spike-wordpress')
 const standard = require('reshape-standard')
 const locals = {}
 
