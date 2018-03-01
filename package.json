@@ -26,7 +26,7 @@
     "path": "^0.12.7",
     "reshape-standard": "^1.1.0",
     "rimraf": "^2.5.4",
-    "snazzy": "^6.0.0",
+    "snazzy": "^7.1.1",
     "spike-core": "^1.0.0",
     "standard": "^10.0.2"
   },
