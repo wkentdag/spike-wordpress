@@ -12,7 +12,7 @@
     "he": "^1.1.0",
     "joi": "^10.0.0",
     "lodash.pickby": "^4.6.0",
-    "reshape": "^0.4.1",
+    "reshape": "^1.0.0",
     "reshape-loader": "^1.0.0",
     "rest": "^2.0.0",
     "spike-util": "^1.0.0",
