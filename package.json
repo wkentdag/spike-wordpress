@@ -9,7 +9,7 @@
   },
   "bugs": "https://github.com/wkentdag/spike-wordpress/issues",
   "dependencies": {
-    "he": "^1.1.0",
+    "he": "1.1.1",
     "joi": "^10.0.0",
     "lodash.pickby": "^4.6.0",
     "reshape": "^0.4.1",
